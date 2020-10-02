@@ -1,0 +1,11 @@
+Instructions to setup application and usage of the application
+
+1) Please clone the Git source into local server WAMP or XAMPP
+2) Please restore the DB "whiteboarddb" in PhpMyAdmin
+3) Now access the application through the web browser "http://localhost/IT_Jobs_Japan/"
+4) First click "User White Board Access"
+5) In canvas draw a rectangle using mouse drag
+6) Type the text use want to insert in the top text box field
+7) To view your content in Project Manager Account click "Save" button
+8) Now click "Manager White Board Viewer"
+9) You can see the finally  saved content in Project Manager's canvas
