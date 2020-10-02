@@ -1,7 +1,7 @@
 Instructions to setup application and usage of the application
 
 1) Please clone the Git source into local server WAMP or XAMPP
-2) Please restore the DB "whiteboarddb" in PhpMyAdmin
+2) Please restore the DB "whiteboarddb" in PhpMyAdmin. It includes in Git source Database folder
 3) Now access the application through the web browser "http://localhost/IT_Jobs_Japan/"
 4) First click "User White Board Access"
 5) In canvas draw a rectangle using mouse drag
