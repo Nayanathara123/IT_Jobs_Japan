@@ -47,11 +47,11 @@ function draw_rectangle() {
 	
 	//alert(rectText);
 	ctx.setLineDash([6]);
-    ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+    ctx.strokeRect(rect.startX - 150, rect.startY, rect.w, rect.h);
 
     //alert(rectText);
     //wrapText(ctx, rectText, rect.startX, Number(rect.startY)+ 10, rect.w, 30,"Arial");
-    wrapText(ctx, rectText, rect.startX, Number(rect.startY) + 20, rect.w, "16px","Arial", 16);
+    wrapText(ctx, rectText, rect.startX - 150, Number(rect.startY) + 20, rect.w, "16px","Arial", 16);
 }
 
 

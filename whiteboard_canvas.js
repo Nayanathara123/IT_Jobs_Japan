@@ -5,6 +5,9 @@ var canvas = document.getElementById('whiteBoard'),
     rect = {},
     drag = false;
 
+var canvas2=document.getElementById('whiteBoard2');
+var ctx2=canvas2.getContext('2d');
+
 function init() {
   canvas.addEventListener('mousedown', mouseDown, false);
   canvas.addEventListener('mouseup', mouseUp, false);
@@ -13,6 +16,11 @@ function init() {
 }
 
 init();
+
+//$('#canvas_text').css({ display : none });
+$("#canvas_text").hide();
+$("#canvas_text2").hide();
+
 
 //parameters for circle 
 var canvasOffset=$("#whiteBoard").offset();
@@ -23,11 +31,13 @@ var startY;
 var isDown=false;
 
 //Parameters for line
-var canvasx = $(canvas).offset().left;
-var canvasy = $(canvas).offset().top;
+var canvasx = $(canvas2).offset().left;
+var canvasy = $(canvas2).offset().top;
 var last_mousex = last_mousey = 0;
 var mousex = mousey = 0;
 var mousedown = false;
+
+var freeDrawTool = false;
 
 function mouseDown(e) {
   if(drawCircleCheck){
@@ -64,10 +74,13 @@ function mouseUp(e) {
       mousedown = false;
   }
   else {
+     //alert("Done");
+       
      drag = false;
   }  
 }
 
+var textBoxDraw = false;
 function mouseMove(e) {
   if (drag) {
     if(drawCircleCheck){  
@@ -77,41 +90,60 @@ function mouseMove(e) {
       e.stopPropagation();
       mouseX=parseInt(e.clientX-offsetX);
       mouseY=parseInt(e.clientY-offsetY); 
-      drawCircle(mouseX,mouseY);
+      drawCircle(mouseX,mouseY,ctx2);
       //drawCircleCheck = false;
     }
     else if(drawLineCheck){
        
-        mousex = parseInt(e.clientX-canvasx);
-        mousey = parseInt(e.clientY-canvasy);
-        drawLine();
+      mousex = parseInt(e.clientX-canvasx);
+      mousey = parseInt(e.clientY-canvasy);
+      drawLine(ctx2);
     }
     else{
+      textBoxDraw = true;
       rect.w = (e.pageX - this.offsetLeft) - rect.startX;
       rect.h = (e.pageY - this.offsetTop) - rect.startY ;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      drawTextBox();
+      ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+      drawTextBox(ctx2);
+      textBoxDraw = false;
     }
   }
 }
 
 $("#whiteBoard").mouseout(function(e){handleMouseOut(e);});
 function handleMouseOut(e){
-    if(!isDown){ return; }
-    e.preventDefault();
-    e.stopPropagation();
-    isDown=false;
+        
+    if(drawCircleCheck){ 
+      if(!isDown){ return; }
+      e.preventDefault();
+      e.stopPropagation();
+      isDown=false;
+      drawCircle(mouseX,mouseY,ctx);
+    }
+    else if(drawLineCheck){
+      drawLine(ctx);
+    }
+    else{
+      if(textBoxDraw){
+        drawTextBox(ctx);
+      }
+    } 
 }
 
 function onClick(e) {
   if (drawCircleCheck) {
+     drawCircle(mouseX,mouseY,ctx);
      return false;
   } 
   else if(drawLineCheck){
-     return false;
+    //alert("Line");
+    drawLine(ctx);
+    //return false;
   }
   else {
-
+    if(textBoxDraw){
+      drawTextBox(ctx);
+    }    
     var element = canvas;
     var offsetX = 0, offsetY = 0
 
@@ -129,22 +161,32 @@ function onClick(e) {
     	console.log(x +" "+y);
     	
     } else {
-    	ctx.clearRect(0,0,canvas.width,canvas.height);
+    	ctx2.clearRect(0,0,canvas2.width,canvas2.height);
     } 
-    }   
+  }   
 }
 
 var $text1=document.getElementById("sourceText1");
 
 $text1.onkeyup=function(e){ redrawTexts(); }
 
-function drawTextBox() {
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 5;
-    ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
-    ctx.save();
+var inputRectField = null;
+
+function drawTextBox(context) {
+
+  if(!freeDrawTool){
+    //alert("Ok");
+    context.strokeStyle = 'black';
+    context.lineWidth = 5;
+    $('#canvas_text').css({ top: rect.startY - document.getElementById('toolSection').clientHeight , left: rect.startX - 300, width : rect.w, height: rect.h });
+    $("#canvas_text").show();
+    $('#canvas_text2').css({ top: rect.startY - document.getElementById('toolSection').clientHeight , left: rect.startX - 300, width : rect.w, height: rect.h });
+    $("#canvas_text2").show();
+    context.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+    context.save();
     document.getElementById("sourceText1").removeAttribute("disabled", "false");
     document.getElementById("sourceText1").value = "";
+  }
 }
 
 function redrawTexts(){
@@ -191,14 +233,14 @@ function wrapText(context, text, x, y, maxWidth, fontSize, fontFace, lineHeight)
         }
       }
 
-      context.fillText(line, x, y);
-      
+      context.fillText(line, x, y);      
       return(y);
 }
 
 
 function saveCanvas(){
    
+  $('.sourceText').val($('#canvas_text').val());
   if(Number($text1.value.length) != 0){
 
     $.ajax ({
@@ -208,7 +250,8 @@ function saveCanvas(){
                 rectY : rect.startY, 
                 rectWidth : rect.w, 
                 rectHeight : rect.h, 
-                rectText : $text1.value.substring(0, $text1.value.length - 3)
+                //rectText : $text1.value.substring(0, $text1.value.length - 3)
+                rectText : $text1.value.substring(0, $text1.value.length - 0)
             },
         success: function( result ) {
             alert("Thank you !!! Now your content is view to Project Manager");
@@ -226,6 +269,7 @@ function selectCircle() {
   
   drawCircleCheck = true;
   drawLineCheck = false;
+  freeDrawTool = false;
   //alert(drawCircleCheck);
 }
 
@@ -234,40 +278,48 @@ function selectLine() {
   
   drawLineCheck = true;
   drawCircleCheck = false;
+  freeDrawTool = false;
   
 }
 
 function selectTextBox() {
+  //alert("Box");
   drawLineCheck = false;
   drawCircleCheck = false;
+  freeDrawTool = false;
 }
 
-function drawCircle(x,y) {
+function drawCircle(x,y,context) {
 
   //alert("drawCircle"); 
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.beginPath();
-  ctx.moveTo(startX, startY + (y-startY)/2);
-  ctx.bezierCurveTo(startX, startY, x, startY, x, startY + (y-startY)/2);
-  ctx.bezierCurveTo(x, y, startX, y, startX, startY + (y-startY)/2);
-  //ctx.closePath();
-  ctx.strokeStyle = 'black';
-  ctx.lineWidth = 5;
-  ctx.stroke();
+  ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+  context.beginPath();
+  context.moveTo(startX, startY + (y-startY)/2);
+  context.bezierCurveTo(startX, startY, x, startY, x, startY + (y-startY)/2);
+  context.bezierCurveTo(x, y, startX, y, startX, startY + (y-startY)/2);
+  //context.closePath();
+  context.strokeStyle = 'black';
+  context.lineWidth = 5;
+  context.stroke();
 }
 
-function drawLine() {
+function drawLine(context) {
     if(mousedown) {
-        ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
-        ctx.beginPath();
-        ctx.moveTo(last_mousex,last_mousey);
-        ctx.lineTo(mousex,mousey);
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 6;
-        ctx.lineJoin = ctx.lineCap = 'round';
-        ctx.stroke();
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height); //clear canvas
+        context.beginPath();
+        context.moveTo(last_mousex,last_mousey);
+        context.lineTo(mousex,mousey);
+        context.strokeStyle = 'black';
+        context.lineWidth = 6;
+        context.lineJoin = context.lineCap = 'round';
+        context.stroke();
     }
   //Output
   $('#output').html('current: '+mousex+', '+mousey+'<br/>last: '+last_mousex+', '+last_mousey+'<br/>mousedown: '+mousedown);
 
+}
+
+function getTextBoxValue() {
+   getInputTextBoxVal = inputRectField.val();
+   $('#sourceText1').val(getInputTextBoxVal);
 }

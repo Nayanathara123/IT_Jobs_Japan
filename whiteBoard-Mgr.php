@@ -15,8 +15,9 @@
 <body>
 
  <span class="theme_mgr">You are currently viewing the user's works</span>
- <canvas id="whiteBoardMgr" width="800" height="1200"></canvas>
-
+ <div class="wrapper">
+ 	<canvas id="whiteBoardMgr" width="800" height="1200"></canvas>
+</div>
 	
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
