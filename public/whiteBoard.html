@@ -19,14 +19,14 @@
 <!-- <p class="content_append"></p> -->
 <div class="toolSection" id="toolSection">
 
-    <button id="freeTool" type="submit" onclick="drawFreeTool()">Free Draw Tool</button>
+    <button id="freeTool" type="submit" onclick="drawFreeTool()" style="background-color: #007bff">Free Draw Tool</button>
     <button id="red" class="color">Red</button>
     <button id="green" class="color">Green</button>
     <button id="blue" class="color">Blue</button>
     <button id="black" class="color">Black</button>
-    <button id="darkgrey" class="color">darkgrey</button>
-    <button id="grey" class="color">grey</button>
-    <button id="lightgrey" class="color">lightgrey</button>
+    <button id="darkgrey" class="color" style="background-color: #323538">darkgrey</button>
+    <button id="grey" class="color" style="background-color: #626467">grey</button>
+    <button id="lightgrey" class="color" style="background-color: #959698">lightgrey</button>
     <textarea name="backup" id="backup" cols="60" rows="10" style="display: none;"></textarea>   
     <p id="redraw-count" style="display: none;">0</p>
     <button id="clear" style="display: none;">Clear canvas</button>
@@ -41,15 +41,13 @@
 
     </br></br>
 
-
-
-  <button id="circle" type="submit" onclick="selectTextBox()">Text Box</button>
-  <button id="circle" type="submit" onclick="selectCircle()">Circle</button>
-  <button id="line" type="submit" onclick="selectLine()">Line</button>
+  <button id="circle" type="submit" onclick="selectTextBox()" style="background-color: #007bff">Text Box</button>
+  <button id="circle" type="submit" onclick="selectCircle()" style="background-color: #007bff">Circle</button>
+  <button id="line" type="submit" onclick="selectLine()" style="background-color: #007bff">Line</button>
 
   <!-- <span>Type text to for your drawn rectangle</span> -->
 	<input id="sourceText1" type="text" class="sourceText" style="display: none;">
-	<button id="save" type="submit" onclick="sendWork()">Save Your Work</button>
+	<button id="save" type="submit" onclick="sendWork()" style="background-color: #28a745">Save Your Work</button>
     <br>
 </div>
 

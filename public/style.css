@@ -55,7 +55,7 @@ body {
 
 .toolSection button{
 	color: #fff;
-    background: #3571bb;
+    /*background: #3571bb;*/
     border: 1px solid #3571bb;
     border-radius: 3px;
     padding: 5px 10px;
