@@ -105,7 +105,7 @@ function mouseMove(e) {
       rect.w = (e.pageX - this.offsetLeft) - rect.startX;
       rect.h = (e.pageY - this.offsetTop) - rect.startY ;
       ctx2.clearRect(0,0,canvas2.width,canvas2.height);
-      drawTextBox(ctx2);
+      drawTextBox(ctx);
       textBoxDraw = false;
     }
   }
@@ -184,7 +184,7 @@ function drawTextBox(context) {
     $('#canvas_text2').css({ top: rect.startY - document.getElementById('toolSection').clientHeight , left: rect.startX - 300, width : rect.w, height: rect.h });
     $("#canvas_text2").show();
     context.strokeRect(rect.startX-this.offsetLeft, rect.startY-this.offsetTop, rect.w, rect.h);
-    context.save();
+   // context.save();
     document.getElementById("sourceText1").removeAttribute("disabled", "false");
     document.getElementById("sourceText1").value = "";
     $('#canvas_text').val('');
