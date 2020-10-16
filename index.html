@@ -1,0 +1,23 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>White Board</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="btn_wrapper">
+	  <a href="whiteBoard.html" class="user_access">User White Board Access</a>
+	  <a href="whiteBoard-Mgr.html" class="mgr_access">Manager White Board Viewer</a>
+	</div>	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+     <!-- <script src="whiteboardMgr_canvas.js"></script> -->
+
+     <script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	</script>
+  </body>
+</html>
