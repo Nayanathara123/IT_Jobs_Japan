@@ -60,6 +60,9 @@
  <!--  <input type="text" id="canvas_text" style="position:absolute; left=?; top=?;" /> -->
   <textarea id="canvas_text" style="position:absolute; left=?; top=?;" rows="4" cols="50"></textarea>
 </div>
+
+<input type="text" id="mainText" style="display:none;" />
+<input type="text" id="translatedText" style="display:none;" />
 	
 	
  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
@@ -165,15 +168,18 @@
             "x-rapidapi-host": "translated-mymemory---translation-memory.p.rapidapi.com",
             "x-rapidapi-key": "9d4ac67208mshe0921b379f9c0f9p186b64jsna910dee8a1ae"
           }
-        };
+        };       
 
         $.ajax(settings).done(function (response) {
           console.log(response);
           //alert(response.responseData.translatedText);
+          $('#mainText').val($('#canvas_text').val());
+          $('#translatedText').val(response.responseData.translatedText);
+          //alert(mainText); alert(translatedText);
 
           var txtArea = document.getElementById("canvas_text");
           txtArea.value =  $('#canvas_text').val() + '\r\n' + response.responseData.translatedText;
-          $('#canvas_text').val(txtArea.value);
+          $('#canvas_text').val(txtArea.value);          
         });
 
         window.setTimeout(socketEmit, 1800);       
@@ -181,10 +187,13 @@
 
       function socketEmit(){
 
-        var textBoxVal = $('#canvas_text').val();
-        var rectangleBuild = {startX:rect.startX,startY:rect.startY,width:rect.w,height:rect.h,text:textBoxVal}
+        var mainText = $('#mainText').val();
+        var translatedText = $('#translatedText').val();
+
+        var rectangleBuild = {startX:rect.startX,startY:rect.startY,width:rect.w,height:rect.h,text:mainText, translate:translatedText}
         //alert(textBoxVal);
         //const jsonData = JSON.stringify(rectangleBuild);//canvas.toDataURL();
+        alert(mainText); alert(translatedText);
         socket.emit('chat message', rectangleBuild);
         //alert(jsonData);
         
@@ -197,15 +206,15 @@
         socket.on('chat message', function(msg){
                 //alert(msg);
             //$('.content_append').append($('<p>').text(msg.startX));
-            //alert(msg.text);
+            
             var canvas=document.getElementById('whiteBoard');
             var context=canvas.getContext('2d');
             context.strokeStyle = 'black';
             context.lineWidth = 1;
             context.font = "14px Arial";
             context.strokeRect(msg.startX-300, msg.startY-132, msg.width, msg.height);
-            context.fillText(msg.text, msg.startX-300+10, msg.startY-132+(msg.height/3));
-
+            context.fillText(msg.text, msg.startX-300+10, msg.startY-132+16);
+            context.fillText(msg.translate, msg.startX-300+10, msg.startY-116+16);
             //removeTextAllNodes(context,msg.text);
         }); 
       });
