@@ -98,7 +98,7 @@ function mouseMove(e) {
        
       mousex = parseInt(e.clientX-canvasx);
       mousey = parseInt(e.clientY-canvasy);
-      drawLine(ctx2);
+      drawLine(ctx);
     }
     else{
       textBoxDraw = true;
@@ -308,13 +308,13 @@ function drawCircle(x,y,context) {
 function drawLine(context) {
     if(mousedown) {
         ctx2.clearRect(0,0,canvas2.width,canvas2.height); //clear canvas
-        context.beginPath();
-        context.moveTo(last_mousex,last_mousey);
-        context.lineTo(mousex,mousey);
-        context.strokeStyle = 'black';
-        context.lineWidth = 6;
-        context.lineJoin = context.lineCap = 'round';
-        context.stroke();
+        ctx.beginPath();
+        ctx.moveTo(last_mousex,last_mousey);
+        ctx.lineTo(mousex,mousey);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.lineJoin = ctx.lineCap = 'round';
+        ctx.stroke();
     }
   //Output
   $('#output').html('current: '+mousex+', '+mousey+'<br/>last: '+last_mousex+', '+last_mousey+'<br/>mousedown: '+mousedown);
